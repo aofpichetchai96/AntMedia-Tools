@@ -5,6 +5,14 @@ var port = "5080";
 document.getElementById("host").value = host;
 document.getElementById("port").value = port;
 
+if(localStorage.getItem("authenticated") == "true"){   
+    let email = localStorage.getItem("email");
+    document.getElementById("login-time-input").value = `Email : ${email}`;
+
+    document.getElementById("login-action").style.display = "none";
+    document.getElementById("login-time").style.display = "block";   
+}
+
 document.getElementById("button-save-host").addEventListener("click", function() {
     host = document.getElementById("host").value;
     port = document.getElementById("port").value;
@@ -68,20 +76,20 @@ async function login(){
             }
         );
         response = response.data;
-        // console.log(response);
-        // console.log(response.success);      
+
         if(response.success === true) {
-            const message = response.message.split("/");
+            const message = await response.message.split("/");
             localStorage.setItem("authenticated", response.success);
             localStorage.setItem("email", email);
             localStorage.setItem("role", message[1]);
             localStorage.setItem("scope", message[0]);          
 
-            Swal.fire({
+           await Swal.fire({
                 title: "Login Success!",
                 text: "You clicked the button!",
                 icon: "success"
             });
+            window.location.reload();
         }else{
             Swal.fire({
                 title: "Login Failed!",
@@ -91,7 +99,6 @@ async function login(){
         }
 
     } catch (error) {
-        console.log(error.message);
         Swal.fire({
             title: "Login Failed!",
             text: "You clicked the button!",
@@ -99,6 +106,28 @@ async function login(){
         });
     }
 }
+async function logout(){
+    localStorage.removeItem("authenticated");
+    localStorage.removeItem("email");
+    localStorage.removeItem("role");
+    localStorage.removeItem("scope");    
+    const email = localStorage.getItem("email");
+    if(!email || !port) {
+        await Swal.fire({
+            title: "Logout Success!",
+            text: "You clicked the button!",
+            icon: "success"
+        });
+        window.location.reload();
+    }else{
+        Swal.fire({
+            title: "Login Failed!",
+            text: "You clicked the button!",
+            icon: "error"
+        });
+    }
+}
+
 
 // async function check_api(){
 //     try {
