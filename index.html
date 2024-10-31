@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./icon.png" sizes="32x32" type="image/png">
+    <title>Ant Media Tools</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./main.css">
+</head>
+<body>
+    <div class="container">
+        <label><b><h1>Ant Media Tools @PiramidDev 2024</h1></b></label><br><br>
+           
+            <form class="row g-3" action="">
+                <u><b><h4>Setting Host And Port</h4></b><br></u>
+                <div class="col-sm-6">
+                    <label for="host" class="form-label" ><b>Host Ant Media Server</b></label>    
+                    <input type="text" class="form-control" id="host" placeholder="Ex: http://127.0.0.1" value="" required="">            
+                  </div>
+                  <div class="col-sm-6">
+                    <label for="post" class="form-label"><b>Port</label><b></label>
+                    <input type="text" class="form-control" id="port" placeholder="Ex: 5080" value="" required="">           
+                  </div>    
+                  <button id="button-save-host" type="button" class="button-host-form btn btn-outline-primary">Save</button>            
+            </form>    
+    </div>
+    <br><br>
+    <div class="container login">
+        <form class="row g-3" action="" style="margin: 0 auto;">
+            <u><b><h4>Login Atn Media</h4></b><br></u>
+            <div class="col-sm-6">
+                <label for="email" class="form-label" ><b>Email</b></label>    
+                <input type="text" class="form-control" id="email" placeholder="Ex: example@xxxx.co.th" value="" required="">            
+              </div>
+              <div class="col-sm-6">
+                <label for="password" class="form-label"><b>Password</label><b></label>
+                <input type="password" class="form-control" id="password" placeholder="Ex: *********" value="" required="">           
+              </div>    
+              <button type="button" onclick="login()" class="button-host-form btn btn-outline-success">Login</button>           
+        </form>  
+    </div>
+
+    <br><br>
+    <div class="container">
+        <!-- <button type="button" onclick="check_api()" class="button-host-form btn btn-outline-success">CHeck</button>    -->
+        <!-- <form _ngcontent-uvc-c117="" novalidate="" method="post" validate="" class="ng-untouched ng-pristine ng-invalid">
+            <div _ngcontent-uvc-c117="" class="card-header">
+                <h4 _ngcontent-uvc-c117="" class="card-title text-left"> New Stream Source </h4>
+            </div>
+            <div _ngcontent-uvc-c117="" class="card-content">
+                <div _ngcontent-uvc-c117="" class="form-group text-left">
+                    <label _ngcontent-uvc-c117="">Name*</label>
+                    <input _ngcontent-uvc-c117="" type="text" required="" minlength="4" name="broadcastName" class="form-control ng-untouched ng-pristine ng-invalid" placeholder="Stream name">
+                    <small _ngcontent-uvc-c117="" class="text-danger" hidden=""> Stream name should be at least 4 characters. </small>
+                </div>
+                <div _ngcontent-uvc-c117="" class="form-group text-left">
+                    <label _ngcontent-uvc-c117="">Stream URL*</label>
+                    <input _ngcontent-uvc-c117="" type="text" required="" minlength="4" name="broadcasturl" placeholder="Remote Stream URL" class="form-control ng-untouched ng-pristine ng-invalid">
+                    <small _ngcontent-uvc-c117="" class="text-danger" hidden=""> Stream URL is not valid </small>
+                </div>
+                <div _ngcontent-uvc-c117="" class="form-group text-left">
+                    <label _ngcontent-uvc-c117="">Stream Id</label>
+                    <input _ngcontent-uvc-c117="" type="text" minlength="4" name="streamId" placeholder="Unique Id of the stream. If you do not enter a value, It will be generated automatically" class="form-control ng-untouched ng-pristine ng-valid">
+                    <small _ngcontent-uvc-c117="" class="text-danger" hidden=""> Stream Id should be at least 4 characters. </small>
+                </div>
+                <div _ngcontent-uvc-c117="" class="form-group text-center">
+                    <button _ngcontent-uvc-c117="" type="submit" class="btn btn-fill btn-success">Create</button>
+                    <button _ngcontent-uvc-c117="" type="button" class="btn btn-simple">Cancel</button>
+                </div>
+            </div>
+        </form> -->
+        <!-- <form class="row g-3" action="" style="margin: 0 auto;">
+            <u><b><h4>Login Atn Media</h4></b><br></u>
+            <div class="col-sm-6">
+                <label for="email" class="form-label" ><b>Email</b></label>    
+                <input type="text" class="form-control" id="email" placeholder="Ex: example@xxxx.co.th" value="" required="">            
+              </div>
+              <div class="col-sm-6">
+                <label for="password" class="form-label"><b>Password</label><b></label>
+                <input type="password" class="form-control" id="password" placeholder="Ex: *********" value="" required="">           
+              </div>    
+              <button type="button" onclick="login()" class="button-host-form btn btn-outline-success">Login</button>           
+        </form>   -->
+    </div>
+   
+   
+   
+
+
+
+
+<script src="./js/bootstrap.bundle.min.js"></script>
+<script src="./js/sweetalert2.js"></script>
+<script src="./js/axios.min.js"></script>
+<script src="./js/crypto-js.min.js"></script>
+<script src="./main.js"></script>
+</body> 
+</html> 
