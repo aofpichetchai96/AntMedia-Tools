@@ -39,3 +39,10 @@ form {
     margin-bottom: 25px;
     margin: 0 auto;
 }
+
+.login-time-style{
+    text-align: center;
+    width: 50%;
+    margin: 0 auto; 
+    background-color: #bcf2e0;
+}

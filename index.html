@@ -26,7 +26,7 @@
             </form>    
     </div>
     <br><br>
-    <div class="container login">
+    <div class="container login" id="login-action">
         <form class="row g-3" action="" style="margin: 0 auto;">
             <u><b><h4>Login Atn Media</h4></b><br></u>
             <div class="col-sm-6">
@@ -41,9 +41,21 @@
         </form>  
     </div>
 
+    <div class="container login" id="login-time" style="display:none;">
+        <form class="row g-3" action="" style="margin: 0 auto;">
+            <u><b><h4>Login Atn Media</h4></b></u>         
+            <div class="col-sm-12">
+                <input type="text" class="login-time-style form-control" id="login-time-input" value="" readonly>   
+            </div>
+            <div class="col-sm-12">
+                <button type="button" onclick="logout()" class="button-host-form btn btn-outline-danger">Logout</button>               
+            </div>   
+        </form>  
+    </div>
+
     <br><br>
     <div class="container">
-        <!-- <button type="button" onclick="check_api()" class="button-host-form btn btn-outline-success">CHeck</button>    -->
+        <button type="button" onclick="check_api()" class="button-host-form btn btn-outline-success">CHeck</button>   
         <!-- <form _ngcontent-uvc-c117="" novalidate="" method="post" validate="" class="ng-untouched ng-pristine ng-invalid">
             <div _ngcontent-uvc-c117="" class="card-header">
                 <h4 _ngcontent-uvc-c117="" class="card-title text-left"> New Stream Source </h4>
