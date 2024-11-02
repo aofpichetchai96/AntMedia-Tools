@@ -89,12 +89,15 @@ app.post('/check_api', async (req, res) => {
             api_login,
             data,
             {                
-                headers: {'Content-Type': 'application/json'}
+                headers: {'Content-Type': 'application/json'},
+                withCredentials: true
             }
         );
-        
+        const setCookieHeader = response.headers['set-cookie'][0];
+    
         response = response.data;
-        if(response.success === true){
+        if(response.success === true){        
+            const jsessionIdValue = setCookieHeader.split(';')[0];
             const data_add ={
                                 "hlsViewerCount":0,
                                 "dashViewerCount":0,
@@ -107,12 +110,15 @@ app.post('/check_api', async (req, res) => {
                                 "streamUrl":"rtsp://172.20.0.53:554/profile2/media.smp",
                                 "type":"streamSource"
                             }
-            console.log(data_add);
             let res = await axios.post(
                 api_check,
                 data_add,
                 {                
-                    headers: {'Content-Type': 'application/json'}
+                    headers: {
+                                'Content-Type': 'application/json',
+                                'Cookie': `${jsessionIdValue}`
+                            },
+                    withCredentials: true
                 }
             );
             console.log(res);
