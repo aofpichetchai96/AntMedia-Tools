@@ -14,6 +14,28 @@ if(localStorage.getItem("authenticated") == "true"){
     document.getElementById("create-streams").style.display = "block";  
 }
 
+document.getElementById('streamid-name1').value = '';
+document.getElementById('streamid-name2').value = '';
+function changeButtonText(newText) {
+    document.getElementById('actionButton').innerText = newText;
+}
+
+function showDiv(action1Div, action2Div) {
+
+    var div1 = document.getElementById('action1-from');
+    var div2 = document.getElementById('action2-from');
+
+    div1.style.display = 'none';
+    div2.style.display = 'none';
+
+    if (action1Div !== 'none') {
+        document.getElementById(action1Div).style.display = 'block';
+    }
+    if (action2Div !== 'none') {
+        document.getElementById(action2Div).style.display = 'block';
+    }
+}
+
 document.getElementById("button-save-host").addEventListener("click", function() {
     host = document.getElementById("host").value;
     port = document.getElementById("port").value;
@@ -48,91 +70,21 @@ window.addEventListener("load", function() {
         document.getElementById("host").value = storedHost;
         document.getElementById("port").value = storedPort;
      
-        const applist = JSON.parse(localStorage.getItem("applist")); 
-        const selectedAppDisplay  = document.getElementById("dropdownList");
-        
+        const applist = JSON.parse(localStorage.getItem("applist")) || []; 
+        const appSelect = document.getElementById("appSelect");
+                
         applist.forEach(app => {
             const option = document.createElement("option");
-            option.value = app; // ค่าที่จะถูกส่งเมื่อเลือก
-            option.textContent = app; // ข้อความที่จะแสดงใน dropdown
+            option.value = app; 
+            option.textContent = app; 
             appSelect.appendChild(option);
         });
-
-        // เพิ่ม Event Listener เพื่อจัดการเมื่อเลือกตัวเลือก
-        appSelect.addEventListener("change", function() {
-            const selectedValue = this.value; // ค่าที่เลือก
-            selectedAppDisplay.textContent = "Selected App: " + (selectedValue || "None");
-        });
-
-
-        // applist.forEach(app => {
         
-        //     const listItem = document.createElement("li");           
-        //     link.className = "applist";
-        //     link.href = "#";
-        //     link.textContent = app;
-        //     listItem.appendChild(link);
-        //     dropdownList.appendChild(listItem);
-        // });
-          // วนลูปข้อมูลใน applist และเพิ่มแต่ละตัวเลือกใน dropdown
-        // applist.forEach(app => {
-        //     const listItem = document.createElement("li");
-        //     const link = document.createElement("a");
-        //     link.className = "applist";
-        //     // link.href = "#";  // เปลี่ยน URL ตามต้องการ
-        //     link.textContent = app;
-        //     link.value = app;
-
-        //     // เพิ่ม Event Listener เพื่อจัดการเมื่อคลิกที่ตัวเลือก
-        //     link.addEventListener("click", function(event) {
-        //         event.preventDefault(); // ป้องกันการรีเฟรชหน้า
-        //         dropdownButton.textContent = app; // เปลี่ยนข้อความบนปุ่ม dropdown
-        //     });
-
-        //     listItem.appendChild(link);
-        //     dropdownList.appendChild(listItem);
-        // });
-
-
+        appSelect.addEventListener("change", function() {
+            const selectedValue = this.value;
+        });
     }
 }); 
-
-// async function getAppList(){
-//     const host = localStorage.getItem("host");
-//     const port = localStorage.getItem("port");
-//     if(!host || !port) {
-//         Swal.fire({
-//             title: "เช็ตค่า Host และ Port ให้ถูกต้อง!",
-//             text: "You clicked the button!",
-//             icon: "error"
-//         });
-//         window.location.reload();
-//     }
-//     var api_checkapp = 'http://127.0.0.1:3009/checkapp';
-
-//     const data = { host: host, port: port }
- 
-//     try {        
-//         var response = await axios.post(
-//             api_checkapp,
-//             data,
-//             {                
-//                 headers: { 'Content-Type': 'application/json'}
-//             }
-//         );
-//         response = response.data;
-//         if(response.code == 1001){
-//             response = JSON.parse(response.data);
-//             return response.data;
-//         }else{
-//             return false;
-//         }
-        
-//     } catch (error) {
-//         console.log(error.message);
-//         return false;
-//     }
-// }
 
 async function login(){
 
@@ -230,53 +182,98 @@ async function logout(){
     }
 }
 
+async function Confirme_action1() {
+    await Swal.fire({
+        title: 'Confirme Create?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Create!'
+    }).then((result) => {
+        let res = result.isConfirmed;
+        if(res){
+            // console.log('OK')
+            let app             = document.getElementById("appSelect").value;
+            let hostrtsp        = document.getElementById("host-rtsp").value;
+            let streamidname    = document.getElementById("streamid-name1").value;
+            let data = {
+                app: app,
+                hostrtsp: hostrtsp,
+                streamidname: streamidname
+            }
+            console.log(data);
+        }
+        else return false;   
+    });
+}
 
-// async function check_api(){
+async function Confirme_action2() {
+    await Swal.fire({
+        title: 'Confirme Create?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Create!'
+    }).then( async (result) => {
+        let res = result.isConfirmed;
+        if(res){
+            // console.log('OK')
+            let app             = document.getElementById("appSelect").value;
+            let streamidname    = document.getElementById("streamid-name2").value;
+            let data = {
+                app: app,
+                streamidname: streamidname
+            }
+            console.log(data);
+            let rs = await create(data);
+            console.log(rs);
+        }
+        else return false;   
+    });
+}
 
-//     const host = localStorage.getItem("host");
-//     const port = localStorage.getItem("port");
-//     if(!host || !port) {
-//         Swal.fire({
-//             title: "เช็ตค่า Host และ Port ให้ถูกต้อง!",
-//             text: "You clicked the button!",
-//             icon: "error"
-//         });
-//         window.location.reload();
-//     }
-//     const email = localStorage.getItem("email");
-//     const password = localStorage.getItem("password");
-//     if(!email || !password) {
-//         logout();
-//         Swal.fire({
-//             title: "Sesssion Failed! Please Login Again!",
-//             text: "You clicked the button!",
-//             icon: "error"
-//         });
-//         window.location.reload();
-//     }
 
-//     var login_api = 'http://127.0.0.1:3009/check_api';
-//     const data = {   
-//         email: email, 
-//         password: CryptoJS.MD5(password).toString(),
-//         host: host,
-//         port: port     
-//     }
+async function create(data){
 
-//     try {        
-//         var response = await axios.post(
-//             login_api,
-//             data,
-//             {                
-//                 headers: { 'Content-Type': 'application/json'}
-//             }
-//         );
-//         response = response.data;
-//         console.log("DATA => ",response);
+    const host = localStorage.getItem("host");
+    const port = localStorage.getItem("port");
+    if(!host || !port) {
+        Swal.fire({
+            title: "เช็ตค่า Host และ Port ให้ถูกต้อง!",
+            text: "You clicked the button!",
+            icon: "error"
+        });
+        window.location.reload();
+    }
+
+    var api_create = 'http://127.0.0.1:3009/create';
+    const [rtspUrl, name] = data.streamidname.split(',');
+    const dataAdd = {   
+        host: host,
+        port: port,     
+        name: name,   
+        rtsp_host: rtspUrl,     
+        app: data.app     
+    }
+
+    try {        
+        var response = await axios.post(
+            api_create,
+            dataAdd,
+            {                
+                headers: { 'Content-Type': 'application/json'}
+            }
+        );
+        response = response.data;
+        console.log("DATA => ",response);
 
         
-//     } catch (error) {
-//         console.log(error.message);
-//     }
+    } catch (error) {
+        console.log(error.message);
+    }
  
-// }
+}

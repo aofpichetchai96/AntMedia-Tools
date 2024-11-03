@@ -142,8 +142,8 @@ app.post('/login', async (req, res) => {
 
 app.post('/create', async (req, res) => {
     try{
-        const { name, streamid, rtsp_host, app, host, port } = req.body;
-        if(!name || !streamid || !rtsp_host || !host || !port){
+        const { name, rtsp_host, app, host, port } = req.body;
+        if(!name || !rtsp_host || !app || !host || !port){
             const data = {  
                 code: 998,
                 message:'Data required incorrect.'
@@ -161,7 +161,7 @@ app.post('/create', async (req, res) => {
                             "playlistLoopEnabled":true,
                             "playListItemList":[],
                             "name": `${name}`,
-                            "streamUrl":"rtsp://172.20.0.53:554/profile2/media.smp",
+                            "streamUrl":`${rtsp_host}`,
                             "type":"streamSource"
                         }
         let response = await axios.post(

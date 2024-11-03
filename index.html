@@ -53,38 +53,62 @@
     </div><br>
     
     <div class="container create-streams" id="create-streams" style="display:none;">
-        <form class="row g-3" action="">
+        <!-- Add Stream Source RTSP -->
+        <form class="row g-3" action="" style="padding-bottom: 20px;">
             <u><b><h4>Add Stream Source RTSP</h4></b></u>
      
-            <div class="streams-app">
+            <div class="col-sm-6 streams-app">
                 <label style="float: left;">Select App</label>
                 <select id="appSelect" name="app" class="form-select" style="cursor: pointer;">
                     <option value="">Choose an app...</option>
                 </select>
             </div>
-            <div class="col-sm-10">
-                <label for="host" class="form-label" ><b>Host rtps and user password</b></label>    
-                <input type="text" class="form-control" id="host" placeholder="Ex: rtsp://127.0.0.1" value="" required="">            
-            </div>          
-            <div class="col-sm-2 dropdown">
-                <label for="host" class="form-label" style="float: none;"><b> Select Action</b></label>
-                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
-                  Select Action
+            <div class="col-sm-6 streams-app" style="padding-top: 0px;">
+                <label for="host" class="form-label" style="float: none;"><b>Select Action</b></label>  
+                <button id="actionButton" style="width: auto;" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                    Select Action
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Link 1</a></li>
-                  <li><a class="dropdown-item" href="#">Link 2</a></li>
+                    <li><a class="dropdown-item" href="#" id="action0" onclick="changeButtonText('Select Action'); showDiv('none', 'none');">Select Action</a></li>
+                    <li><a class="dropdown-item" href="#" id="action1" onclick="changeButtonText('rpst Host And StreamId, Name'); showDiv('action1-from', 'none');">rpst Host And StreamId, Name</a></li>
+                    <li><a class="dropdown-item" href="#" id="action2" onclick="changeButtonText('rpst Link And Name'); showDiv('none', 'action2-from');">rpst Link And Name</a></li>
                 </ul>
-              </div>
-        </form>
-       
+            </div>
+            
+            <div class="col-sm-10" id="action1-from" style="margin: 0 auto; padding-top:35px; display:none">
+                <label for="host" class="form-label" ><b>Host rtps</b></label>    
+                <input type="text" name="hostrtsp" class="form-control" id="host-rtsp" placeholder="Example: rtsp://uers:pass@host:port/Streaming/Channels/" value="">
+                <label for="host" class="form-label" ><b>StreamId And Name</b></label> 
+                <textarea 
+                    class="form-control" 
+                    id="streamid-name1" 
+                    name="streamidname" 
+                    placeholder="Example:&#10;123456789124,Cam001&#10;123456781562,Cam002&#10;123467884156,Cam003"
+                    style="resize: vertical; height:150px;"
+                    value="">                    
+                </textarea>   
+                <div class="col-sm-12" style="margin-top: 25px;">
+                    <button type="button" onclick="Confirme_action1()" class="button-host-form btn btn-outline-success">Create</button>               
+                </div> 
+            </div> 
+            <div class="col-sm-10" id="action2-from" style="margin: 0 auto; padding-top:35px; display:none">
+                <label for="host" class="form-label" ><b>rpst Link And Name</b></label>
+                <textarea 
+                    class="form-control" 
+                    id="streamid-name2" 
+                    name="streamidname" 
+                    placeholder="Example:&#10;rtsp://172.0.0.01:554/profile/media.smp,Cam001&#10;rtsp://172.0.0.02:554/profile/media.smp,Cam002&#10;rtsp://172.0.0.03:554/profile/media.smp,Cam003"
+                    style="resize: vertical; height:150px;"
+                    value="">                    
+                </textarea> 
+                <div class="col-sm-12" style="margin-top: 25px;">
+                    <button type="button" onclick="Confirme_action2()" class="button-host-form btn btn-outline-success">Create</button>               
+                </div> 
+            </div> 
+             
+        </form> 
+        <!-- End Add Stream Source RTSP -->       
     </div>
-   
-   
-   
-
-
-
 
 <script src="./js/bootstrap.bundle.min.js"></script>
 <script src="./js/sweetalert2.js"></script>
