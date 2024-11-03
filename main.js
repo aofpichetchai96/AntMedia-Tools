@@ -45,8 +45,60 @@ window.addEventListener("load", function() {
     if (storedHost && storedPort) {
         document.getElementById("host").value = storedHost;
         document.getElementById("port").value = storedPort;
+     
+        const applist = JSON.parse(localStorage.getItem("applist")); 
+        const dropdownList = document.getElementById("dropdownList");
+        
+        applist.forEach(app => {
+        
+            const listItem = document.createElement("li");
+            const link = document.createElement("a");
+            link.className = "dropdown-item";
+            link.href = "#";
+            link.textContent = app;
+            listItem.appendChild(link);
+            dropdownList.appendChild(listItem);
+        });
+
     }
 }); 
+
+// async function getAppList(){
+//     const host = localStorage.getItem("host");
+//     const port = localStorage.getItem("port");
+//     if(!host || !port) {
+//         Swal.fire({
+//             title: "เช็ตค่า Host และ Port ให้ถูกต้อง!",
+//             text: "You clicked the button!",
+//             icon: "error"
+//         });
+//         window.location.reload();
+//     }
+//     var api_checkapp = 'http://127.0.0.1:3009/checkapp';
+
+//     const data = { host: host, port: port }
+ 
+//     try {        
+//         var response = await axios.post(
+//             api_checkapp,
+//             data,
+//             {                
+//                 headers: { 'Content-Type': 'application/json'}
+//             }
+//         );
+//         response = response.data;
+//         if(response.code == 1001){
+//             response = JSON.parse(response.data);
+//             return response.data;
+//         }else{
+//             return false;
+//         }
+        
+//     } catch (error) {
+//         console.log(error.message);
+//         return false;
+//     }
+// }
 
 async function login(){
 
@@ -81,9 +133,10 @@ async function login(){
             }
         );
         response = response.data;
-
+       
         if(response.code == 1001){
-            response = JSON.parse(response.data);
+            let appliat = JSON.parse(response.apps)
+            response = JSON.parse(response.data);          
 
             const message = response.message.split("/");
             localStorage.setItem("authenticated", response.success);
@@ -91,7 +144,11 @@ async function login(){
             localStorage.setItem("password", CryptoJS.MD5(password).toString());
             localStorage.setItem("role", message[1]);
             localStorage.setItem("scope", message[0]);  
-            
+
+            if(Object.keys(appliat).length > 0) {
+                const NamesAppList = appliat.map(item => item.name);
+                localStorage.setItem("applist", JSON.stringify(NamesAppList)); 
+            }
             await Swal.fire({
                 title: "Login Success!",
                 text: "You clicked the button!",
@@ -121,6 +178,7 @@ async function logout(){
     localStorage.removeItem("role");
     localStorage.removeItem("scope");    
     localStorage.removeItem("password");    
+    localStorage.removeItem("applist");    
     const email = localStorage.getItem("email");
     if(!email || !port) {
         await Swal.fire({
@@ -139,52 +197,52 @@ async function logout(){
 }
 
 
-async function check_api(){
+// async function check_api(){
 
-    const host = localStorage.getItem("host");
-    const port = localStorage.getItem("port");
-    if(!host || !port) {
-        Swal.fire({
-            title: "เช็ตค่า Host และ Port ให้ถูกต้อง!",
-            text: "You clicked the button!",
-            icon: "error"
-        });
-        window.location.reload();
-    }
-    const email = localStorage.getItem("email");
-    const password = localStorage.getItem("password");
-    if(!email || !password) {
-        logout();
-        Swal.fire({
-            title: "Sesssion Failed! Please Login Again!",
-            text: "You clicked the button!",
-            icon: "error"
-        });
-        window.location.reload();
-    }
+//     const host = localStorage.getItem("host");
+//     const port = localStorage.getItem("port");
+//     if(!host || !port) {
+//         Swal.fire({
+//             title: "เช็ตค่า Host และ Port ให้ถูกต้อง!",
+//             text: "You clicked the button!",
+//             icon: "error"
+//         });
+//         window.location.reload();
+//     }
+//     const email = localStorage.getItem("email");
+//     const password = localStorage.getItem("password");
+//     if(!email || !password) {
+//         logout();
+//         Swal.fire({
+//             title: "Sesssion Failed! Please Login Again!",
+//             text: "You clicked the button!",
+//             icon: "error"
+//         });
+//         window.location.reload();
+//     }
 
-    var login_api = 'http://127.0.0.1:3009/check_api';
-    const data = {   
-        email: email, 
-        password: CryptoJS.MD5(password).toString(),
-        host: host,
-        port: port     
-    }
+//     var login_api = 'http://127.0.0.1:3009/check_api';
+//     const data = {   
+//         email: email, 
+//         password: CryptoJS.MD5(password).toString(),
+//         host: host,
+//         port: port     
+//     }
 
-    try {        
-        var response = await axios.post(
-            login_api,
-            data,
-            {                
-                headers: { 'Content-Type': 'application/json'}
-            }
-        );
-        response = response.data;
-        console.log("DATA => ",response);
+//     try {        
+//         var response = await axios.post(
+//             login_api,
+//             data,
+//             {                
+//                 headers: { 'Content-Type': 'application/json'}
+//             }
+//         );
+//         response = response.data;
+//         console.log("DATA => ",response);
 
         
-    } catch (error) {
-        console.log(error.message);
-    }
+//     } catch (error) {
+//         console.log(error.message);
+//     }
  
-}
+// }

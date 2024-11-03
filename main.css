@@ -1,5 +1,5 @@
 .container {
-    margin-top: 30px;
+    margin-top: 15px;
     text-align: center;
 }
 
@@ -17,7 +17,7 @@ input::placeholder {
 form {
     border: 2px solid #007bff; /* สีขอบฟอร์ม */
     border-radius: 10px; /* มุมโค้งของขอบ */
-    padding: 10px; /* ระยะห่างด้านในฟอร์ม */
+    padding: 3px; /* ระยะห่างด้านในฟอร์ม */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เงา */
 }
 
@@ -25,13 +25,13 @@ form {
     width: 70%;
     border: 2px solid #198754; /* สีขอบฟอร์ม */
     border-radius: 10px; /* มุมโค้งของขอบ */
-    padding: 10px; /* ระยะห่างด้านในฟอร์ม */
+    padding: 3px; /* ระยะห่างด้านในฟอร์ม */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เงา */
 }
 
 .button-host-form{
     width: 150px;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
 }
 
 .button-login-form{

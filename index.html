@@ -24,8 +24,8 @@
                   </div>    
                   <button id="button-save-host" type="button" class="button-host-form btn btn-outline-primary">Save</button>            
             </form>    
-    </div>
-    <br><br>
+    </div><br>
+   
     <div class="container login" id="login-action">
         <form class="row g-3" action="" style="margin: 0 auto;">
             <u><b><h4>Login Atn Media</h4></b><br></u>
@@ -40,7 +40,6 @@
               <button type="button" onclick="login()" class="button-host-form btn btn-outline-success">Login</button>           
         </form>  
     </div>
-
     <div class="container login" id="login-time" style="display:none;">
         <form class="row g-3" action="" style="margin: 0 auto;">
             <u><b><h4>Login Atn Media</h4></b></u>         
@@ -51,11 +50,20 @@
                 <button type="button" onclick="logout()" class="button-host-form btn btn-outline-danger">Logout</button>               
             </div>   
         </form>  
-    </div>
-
-    <br><br>
+    </div><br>
+    
     <div class="container">
-        <button tyspe="button" onclick="check_api()" class="button-host-form btn btn-outline-success">CHeck</button>   
+        <form class="row g-3" action="">
+            <u><b><h4>Add</h4></b><br></u>
+            <div class="dropdown">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                    Application List
+                </button>
+                <ul class="dropdown-menu" id="dropdownList">
+                </ul>
+            </div>
+        </form>
+        <!-- <button tyspe="button" onclick="getAppList()" class="button-host-form btn btn-outline-success">CHeck</button>    -->
         <!-- <form _ngcontent-uvc-c117="" novalidate="" method="post" validate="" class="ng-untouched ng-pristine ng-invalid">
             <div _ngcontent-uvc-c117="" class="card-header">
                 <h4 _ngcontent-uvc-c117="" class="card-title text-left"> New Stream Source </h4>

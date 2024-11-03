@@ -17,6 +17,8 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization']
 };
 
+var Cookie = "";
+
 //Middleware setup 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -44,15 +46,41 @@ app.post('/login', async (req, res) => {
                 headers: {'Content-Type': 'application/json'}
             }
         );
-        
+        const setCookieHeader = response.headers['set-cookie'][0];
+        Cookie = setCookieHeader.split(';')[0];
+
         response = response.data;
         if(response.success === true){
-            const data = {  
-                            code: 1001,
-                            message:'Successfully',
-                            data: JSON.stringify(response)
-                        };
-            return res.status(200).json(data);
+            
+            const api_create = `${host}:${port}/rest/v2/applications-info`;
+            let responseApplist = await axios.get(
+                api_create,
+                {                
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Cookie': `${Cookie}`
+                    },
+                    withCredentials: true
+                }
+            );
+
+            if(responseApplist.data){
+                const data = {  
+                        code: 1001,
+                        message:'Successfully',
+                        data: JSON.stringify(response),
+                        apps: JSON.stringify(responseApplist.data)
+                    };
+
+                return res.status(200).json(data);
+
+            }else{
+                const data = {  
+                    code: 999,
+                    message:'Error in getting application list'
+                };
+                return res.status(200).json(data);
+            }
         } 
         else{
             const data = {  
@@ -67,76 +95,100 @@ app.post('/login', async (req, res) => {
     }
 }); 
 
+// app.post('/checkapp', async (req, res) => {
+//     try{
+//         const { host, port } = req.body;
+//         if(!host || !port){
+//             const data = {  
+//                 code: 998,
+//                 message:'Data required incorrect.'
+//             };
+//             return res.status(200).json(data);
+//         }
 
-app.post('/check_api', async (req, res) => {
+//         const api_create = `${host}:${port}/rest/v2/applications-info`;
+//         let response = await axios.get(
+//             api_create,
+//             {                
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     'Cookie': `${Cookie}`
+//                 },
+//                 withCredentials: true
+//             }
+//         );
+
+//         response = response.data;
+//         if(response){    
+//             const data = {  
+//                             code: 1001,
+//                             message:'Successfully',
+//                             data: JSON.stringify(response)
+//                         };
+//             return res.status(200).json(data);
+//         } 
+//         else{
+//             const data = {  
+//                 code: 999,
+//                 message:'Data not found.',
+//             };
+//             return res.status(200).json(data);
+//         }
+
+//     }catch(err){
+//         return res.status(200).json(err.message);
+//     }
+// });
+
+app.post('/create', async (req, res) => {
     try{
-        const { email, password, host, port } = req.body;
-        if(!email || !password || !host || !port){
+        const { name, streamid, rtsp_host, app, host, port } = req.body;
+        if(!name || !streamid || !rtsp_host || !host || !port){
             const data = {  
                 code: 998,
                 message:'Data required incorrect.'
             };
             return res.status(200).json(data);
         }
-
-        const api_login = `${host}:${port}/rest/v2/users/authenticate`;
-        const api_check = "http://192.168.1.100:5080/rest/v2/request?_path=LiveApp/rest/v2/broadcasts/create&autoStart=true";
-
-
-        const data = {  email: email,  password: password }    
-        
+        const api_create = `${host}:${port}/rest/v2/request?_path=${app}/rest/v2/broadcasts/create&autoStart=true`;
+      
+        const data_create ={
+                            "hlsViewerCount":0,
+                            "dashViewerCount":0,
+                            "webRTCViewerCount":0,
+                            "rtmpViewerCount":0,
+                            "mp4Enabled":0,
+                            "playlistLoopEnabled":true,
+                            "playListItemList":[],
+                            "name": `${name}`,
+                            "streamUrl":"rtsp://172.20.0.53:554/profile2/media.smp",
+                            "type":"streamSource"
+                        }
         let response = await axios.post(
-            api_login,
-            data,
+            api_create,
+            data_create,
             {                
-                headers: {'Content-Type': 'application/json'},
+                headers: {
+                            'Content-Type': 'application/json',
+                            'Cookie': `${Cookie}`
+                        },
                 withCredentials: true
             }
         );
-        const setCookieHeader = response.headers['set-cookie'][0];
-    
-        response = response.data;
-        if(response.success === true){        
-            const jsessionIdValue = setCookieHeader.split(';')[0];
-            const data_add ={
-                                "hlsViewerCount":0,
-                                "dashViewerCount":0,
-                                "webRTCViewerCount":0,
-                                "rtmpViewerCount":0,
-                                "mp4Enabled":0,
-                                "playlistLoopEnabled":true,
-                                "playListItemList":[],
-                                "name":"AofTestADdasdasdasd55",
-                                "streamUrl":"rtsp://172.20.0.53:554/profile2/media.smp",
-                                "type":"streamSource"
-                            }
-            let res = await axios.post(
-                api_check,
-                data_add,
-                {                
-                    headers: {
-                                'Content-Type': 'application/json',
-                                'Cookie': `${jsessionIdValue}`
-                            },
-                    withCredentials: true
-                }
-            );
-            console.log(res);
-            console.log(res.data);
-            // rtsp://172.20.0.53:554/profile2/media.smp
-            // AofTestADd
 
-            // const data = {  
-            //                 code: 1001,
-            //                 message:'Successfully',
-            //                 data: JSON.stringify(response)
-            //             };
-            // return res.status(200).json(res.data);
+        response = response.data;
+        if(response.success === true){    
+            const data = {  
+                            code: 1001,
+                            message:'Successfully',
+                            data: JSON.stringify(response)
+                        };
+            return res.status(200).json(data);
         } 
         else{
             const data = {  
                 code: 999,
-                message:'Login Filed'
+                message:'add failed',
             };
             return res.status(200).json(data);
         }
