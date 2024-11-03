@@ -10,6 +10,8 @@ if(localStorage.getItem("authenticated") == "true"){
 
     document.getElementById("login-action").style.display = "none";
     document.getElementById("login-time").style.display = "block";   
+
+    document.getElementById("create-streams").style.display = "block";  
 }
 
 document.getElementById("button-save-host").addEventListener("click", function() {
@@ -47,18 +49,50 @@ window.addEventListener("load", function() {
         document.getElementById("port").value = storedPort;
      
         const applist = JSON.parse(localStorage.getItem("applist")); 
-        const dropdownList = document.getElementById("dropdownList");
+        const selectedAppDisplay  = document.getElementById("dropdownList");
         
         applist.forEach(app => {
-        
-            const listItem = document.createElement("li");
-            const link = document.createElement("a");
-            link.className = "dropdown-item";
-            link.href = "#";
-            link.textContent = app;
-            listItem.appendChild(link);
-            dropdownList.appendChild(listItem);
+            const option = document.createElement("option");
+            option.value = app; // ค่าที่จะถูกส่งเมื่อเลือก
+            option.textContent = app; // ข้อความที่จะแสดงใน dropdown
+            appSelect.appendChild(option);
         });
+
+        // เพิ่ม Event Listener เพื่อจัดการเมื่อเลือกตัวเลือก
+        appSelect.addEventListener("change", function() {
+            const selectedValue = this.value; // ค่าที่เลือก
+            selectedAppDisplay.textContent = "Selected App: " + (selectedValue || "None");
+        });
+
+
+        // applist.forEach(app => {
+        
+        //     const listItem = document.createElement("li");           
+        //     link.className = "applist";
+        //     link.href = "#";
+        //     link.textContent = app;
+        //     listItem.appendChild(link);
+        //     dropdownList.appendChild(listItem);
+        // });
+          // วนลูปข้อมูลใน applist และเพิ่มแต่ละตัวเลือกใน dropdown
+        // applist.forEach(app => {
+        //     const listItem = document.createElement("li");
+        //     const link = document.createElement("a");
+        //     link.className = "applist";
+        //     // link.href = "#";  // เปลี่ยน URL ตามต้องการ
+        //     link.textContent = app;
+        //     link.value = app;
+
+        //     // เพิ่ม Event Listener เพื่อจัดการเมื่อคลิกที่ตัวเลือก
+        //     link.addEventListener("click", function(event) {
+        //         event.preventDefault(); // ป้องกันการรีเฟรชหน้า
+        //         dropdownButton.textContent = app; // เปลี่ยนข้อความบนปุ่ม dropdown
+        //     });
+
+        //     listItem.appendChild(link);
+        //     dropdownList.appendChild(listItem);
+        // });
+
 
     }
 }); 

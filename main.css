@@ -2,31 +2,29 @@
     margin-top: 15px;
     text-align: center;
 }
-
 input::placeholder {
-    color: #c2c1c1 !important; /* เปลี่ยนสีของ placeholder */
-    font-style: italic; /* ทำให้ตัวเอียง */
-    opacity: 0.7; /* ความโปร่งใสของข้อความ */
+    color: #c2c1c1 !important; 
+    font-style: italic;
+    opacity: 0.7;
 }
 
 .form-label{
     float: left;
 }
 
-/* ตั้งค่าขอบของฟอร์ม */
 form {
-    border: 2px solid #007bff; /* สีขอบฟอร์ม */
-    border-radius: 10px; /* มุมโค้งของขอบ */
-    padding: 3px; /* ระยะห่างด้านในฟอร์ม */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เงา */
+    border: 2px solid #007bff; 
+    border-radius: 10px; 
+    padding: 3px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
 
 .login form {
     width: 70%;
-    border: 2px solid #198754; /* สีขอบฟอร์ม */
-    border-radius: 10px; /* มุมโค้งของขอบ */
-    padding: 3px; /* ระยะห่างด้านในฟอร์ม */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เงา */
+    border: 2px solid #198754;
+    border-radius: 10px;
+    padding: 3px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
 
 .button-host-form{
@@ -45,4 +43,18 @@ form {
     width: 50%;
     margin: 0 auto; 
     background-color: #bcf2e0;
+}
+
+.create-streams form {
+    margin-top: 15px;
+    border: 2px solid #ffc10759;
+    border-radius: 10px;
+    padding: 3px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.streams-app {
+    padding-top: 10px;
+    margin: 0 auto;
+    width: 20%;
 }
