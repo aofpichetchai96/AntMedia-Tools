@@ -227,7 +227,7 @@ async function Confirme_action1() {
         return;
     }
 
-    
+
     await Swal.fire({
         title: 'Confirme Create?',
         text: "You won't be able to revert this!",
@@ -459,7 +459,7 @@ async function Confirme_action2() {
                         data_creates_result.push(dataNew);
                     }                    
                 }
-                await new Promise(resolve => setTimeout(resolve, 200));                  
+                await new Promise(resolve => setTimeout(resolve, 100));                  
             }
             Swal.close();
 
