@@ -1,5 +1,5 @@
 # Ant Media Tools Manual 
-1. Install NodeJS and npm on your client. [Check version nodejs and apm]
+1. Install NodeJS and npm on your client. [Check version nodejs and apm ** node -v , npm -v **]
 2. Install Vscode and install extensions Live Server.
 3. Clon Git Repository or Download ZIP file Repository [If you want to clone a Git repository, Install Git on your client.]
 4. Install package and run server
