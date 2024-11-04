@@ -97,6 +97,7 @@ async function login(){
             icon: "error"
         });
         window.location.reload();
+        return;
     }
 
     var login_api = 'http://127.0.0.1:3009/login';
@@ -141,6 +142,7 @@ async function login(){
                 icon: "success"
             });
             window.location.reload();
+            return;
 
         }else{
             Swal.fire({
@@ -148,6 +150,7 @@ async function login(){
                 text: "You clicked the button!",
                 icon: "error"
             });
+            return;
         }
     } catch (error) {
         Swal.fire({
@@ -155,6 +158,7 @@ async function login(){
             text: "You clicked the button!",
             icon: "error"
         });
+        return;
     }
 }
 
@@ -173,12 +177,14 @@ async function logout(){
             icon: "success"
         });
         window.location.reload();
+        return;
     }else{
         await Swal.fire({
             title: "Login Failed!",
             text: "You clicked the button!",
             icon: "error"
         });
+        return;
     }
 }
 
@@ -207,9 +213,22 @@ async function Confirme_action1() {
         }
         else return false;   
     });
+    return;
 }
 
 async function Confirme_action2() {
+    const host = localStorage.getItem("host");
+    const port = localStorage.getItem("port");
+    if(!host || !port) {
+        Swal.fire({
+            title: "เช็ตค่า Host และ Port ให้ถูกต้อง!",
+            text: "You clicked the button!",
+            icon: "error"
+        });
+        window.location.reload();
+        return;
+    }
+
     await Swal.fire({
         title: 'Confirme Create?',
         text: "You won't be able to revert this!",
@@ -221,23 +240,90 @@ async function Confirme_action2() {
     }).then( async (result) => {
         let res = result.isConfirmed;
         if(res){
-            // console.log('OK')
+            let data_creates_result = [];
             let app             = document.getElementById("appSelect").value;
             let streamidname    = document.getElementById("streamid-name2").value;
-            let data = {
-                app: app,
-                streamidname: streamidname
+            if(app === undefined || app === null || app === ""){
+                await Swal.fire({
+                    title: "Invalid app data selection!",
+                    text: "You clicked the button!",
+                    icon: "error"
+                });
+                return;
             }
-            console.log(data);
-            let rs = await create(data);
-            console.log(rs);
+
+            if(streamidname === undefined || streamidname === null || streamidname === ""){
+                await Swal.fire({
+                    title: "Invalid rpst Link And Name data!",
+                    text: "You clicked the button!",
+                    icon: "error"
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'Processing...',
+                text: 'Please wait while we process your data.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            const result = streamidname.trim().split('\n').map(line => {
+                const [url, cam] = line.split(',');
+                return  `${url},${cam}`
+            });
+          
+            for (let i = 0; i < result.length; i++) {                
+                let data = {
+                    app: app,
+                    streamidname: result[i]
+                }
+                let rs_create = await create2(data);
+                if(rs_create.code == 1001){                    
+                    let result_data =  JSON.parse(rs_create.data);
+                    if(result_data.success == true){
+                        let dataNew = {
+                            app: app,
+                            streamidname: result[i],
+                            http: `${host}:${port}/${app}/play.html?id=${result_data.dataId}`,
+                            success: result_data.success,
+                            dataId: result_data.dataId
+                        }
+                        data_creates_result.push(dataNew);
+                    }
+                    else{
+                        let dataNew = {
+                            app: app,
+                            streamidname: streamidname,
+                            success: false
+                        }
+                        data_creates_result.push(dataNew);
+                    }                    
+                }
+                await new Promise(resolve => setTimeout(resolve, 500));                  
+            }
+            Swal.close();
+
+            localStorage.setItem("data_creates_result", JSON.stringify(data_creates_result));  
+
+            await Swal.fire({
+                title: "Create Success!",
+                text: "You clicked the button!",
+                icon: "success"
+            });
+            window.location.reload();
+            return;
+
         }
         else return false;   
     });
+    return;
 }
 
 
-async function create(data){
+async function create2(data){
 
     const host = localStorage.getItem("host");
     const port = localStorage.getItem("port");
@@ -248,9 +334,10 @@ async function create(data){
             icon: "error"
         });
         window.location.reload();
+        return;
     }
 
-    var api_create = 'http://127.0.0.1:3009/create';
+    var api_create = 'http://127.0.0.1:3009/create2';
     const [rtspUrl, name] = data.streamidname.split(',');
     const dataAdd = {   
         host: host,
@@ -264,16 +351,11 @@ async function create(data){
         var response = await axios.post(
             api_create,
             dataAdd,
-            {                
-                headers: { 'Content-Type': 'application/json'}
-            }
+            { headers: { 'Content-Type': 'application/json'}}
         );
         response = response.data;
-        console.log("DATA => ",response);
-
-        
+        return response;        
     } catch (error) {
         console.log(error.message);
-    }
- 
+    } 
 }

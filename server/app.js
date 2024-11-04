@@ -140,7 +140,7 @@ app.post('/login', async (req, res) => {
 //     }
 // });
 
-app.post('/create', async (req, res) => {
+app.post('/create2', async (req, res) => {
     try{
         const { name, rtsp_host, app, host, port } = req.body;
         if(!name || !rtsp_host || !app || !host || !port){
