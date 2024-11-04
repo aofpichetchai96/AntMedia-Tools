@@ -4,6 +4,8 @@
 3. Clon Git Repository or Download ZIP file Repository [If you want to clone a Git repository, Install Git on your machine.]
 4. Install package and run server
 ```bash
+#Open Terminal
+
 cd ./server
 
 npm install
