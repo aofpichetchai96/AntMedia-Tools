@@ -14,6 +14,30 @@ if(localStorage.getItem("authenticated") == "true"){
     document.getElementById("create-streams").style.display = "block";  
 }
 
+if(localStorage.getItem("data_creates_result")){       
+    document.getElementById("show-data").style.display = "block";  
+    let data_creates_result = localStorage.getItem("data_creates_result");
+    data_creates_result = JSON.parse(data_creates_result);   
+    if(data_creates_result.length > 0){
+        console.log(data_creates_result); 
+        document.getElementById("data-table").innerHTML = '';
+        data_creates_result.forEach(function(item) {
+            let row = document.createElement('tr');
+            let cell = document.createElement('td');
+                cell.innerText = item.streamidname;
+                row.appendChild(cell);
+            let httpCell = document.createElement('td');
+            let link = document.createElement('a');
+            link.href = item.http;
+            link.innerText = item.http; 
+            link.target = "_blank"; 
+            httpCell.appendChild(link);
+            row.appendChild(httpCell);
+            document.getElementById('data-table').appendChild(row);
+        });
+    }
+}
+
 document.getElementById('streamid-name1').value = '';
 document.getElementById('streamid-name2').value = '';
 function changeButtonText(newText) {
@@ -169,6 +193,8 @@ async function logout(){
     localStorage.removeItem("scope");    
     localStorage.removeItem("password");    
     localStorage.removeItem("applist");    
+    localStorage.removeItem("data_creates_result");
+
     const email = localStorage.getItem("email");
     if(!email || !port) {
         await Swal.fire({
@@ -189,6 +215,19 @@ async function logout(){
 }
 
 async function Confirme_action1() {
+    const host = localStorage.getItem("host");
+    const port = localStorage.getItem("port");
+    if(!host || !port) {
+        Swal.fire({
+            title: "เช็ตค่า Host และ Port ให้ถูกต้อง!",
+            text: "You clicked the button!",
+            icon: "error"
+        });
+        window.location.reload();
+        return;
+    }
+
+    
     await Swal.fire({
         title: 'Confirme Create?',
         text: "You won't be able to revert this!",
@@ -197,23 +236,140 @@ async function Confirme_action1() {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, Create!'
-    }).then((result) => {
+    }).then( async (result) => {
         let res = result.isConfirmed;
         if(res){
-            // console.log('OK')
+            localStorage.removeItem("data_creates_result");
+            let data_creates_result = [];
             let app             = document.getElementById("appSelect").value;
             let hostrtsp        = document.getElementById("host-rtsp").value;
             let streamidname    = document.getElementById("streamid-name1").value;
-            let data = {
-                app: app,
-                hostrtsp: hostrtsp,
-                streamidname: streamidname
+
+            if(app === undefined || app === null || app === ""){
+                await Swal.fire({
+                    title: "Invalid app data selection!",
+                    text: "You clicked the button!",
+                    icon: "error"
+                });
+                return;
             }
-            console.log(data);
+
+            if(hostrtsp === undefined || hostrtsp === null || hostrtsp === ""){
+                await Swal.fire({
+                    title: "Invalid Host rtps data selection!",
+                    text: "You clicked the button!",
+                    icon: "error"
+                });
+                return;
+            }
+
+            if(streamidname === undefined || streamidname === null || streamidname === ""){
+                await Swal.fire({
+                    title: "Invalid rpst Link And Name data!",
+                    text: "You clicked the button!",
+                    icon: "error"
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'Processing...',
+                text: 'Please wait while we process your data.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            const result = streamidname.trim().split('\n').map(line => {
+                const [url, cam] = line.split(',');
+                return  `${url},${cam}`
+            });
+          
+            for (let i = 0; i < result.length; i++) {                
+                let data = {
+                    app: app,
+                    hostrtsp: hostrtsp,
+                    streamidname: result[i]
+                }
+                let rs_create = await create1(data);
+                if(rs_create.code == 1001){                    
+                    let result_data =  JSON.parse(rs_create.data);
+                    if(result_data.success == true){
+                        let dataNew = {
+                            app: app,
+                            streamidname: result[i],
+                            http: `${host}:${port}/${app}/play.html?id=${result_data.dataId}`,
+                            success: result_data.success,
+                            dataId: result_data.dataId
+                        }
+                        data_creates_result.push(dataNew);
+                    }
+                    else{
+                        let dataNew = {
+                            app: app,
+                            streamidname: streamidname,
+                            success: false
+                        }
+                        data_creates_result.push(dataNew);
+                    }                    
+                }
+                await new Promise(resolve => setTimeout(resolve, 200));                  
+            }
+            Swal.close();
+
+            localStorage.setItem("data_creates_result", JSON.stringify(data_creates_result));  
+
+            await Swal.fire({
+                title: "Create Success!",
+                text: "You clicked the button!",
+                icon: "success"
+            });
+            window.location.reload();
+            return;
+
         }
         else return false;   
     });
     return;
+}
+
+async function create1(data){
+
+    const host = localStorage.getItem("host");
+    const port = localStorage.getItem("port");
+    if(!host || !port) {
+        Swal.fire({
+            title: "เช็ตค่า Host และ Port ให้ถูกต้อง!",
+            text: "You clicked the button!",
+            icon: "error"
+        });
+        window.location.reload();
+        return;
+    }
+
+    var api_create = 'http://127.0.0.1:3009/create1';
+    const [streamid, name] = data.streamidname.split(',');
+    const dataAdd = {   
+        host: host,
+        port: port,     
+        hostrtsp: data.hostrtsp,   
+        name: name,   
+        streamid: streamid,     
+        app: data.app     
+    }
+
+    try {        
+        var response = await axios.post(
+            api_create,
+            dataAdd,
+            { headers: { 'Content-Type': 'application/json'}}
+        );
+        response = response.data;
+        return response;        
+    } catch (error) {
+        console.log(error.message);
+    } 
 }
 
 async function Confirme_action2() {
@@ -240,6 +396,7 @@ async function Confirme_action2() {
     }).then( async (result) => {
         let res = result.isConfirmed;
         if(res){
+            localStorage.removeItem("data_creates_result");
             let data_creates_result = [];
             let app             = document.getElementById("appSelect").value;
             let streamidname    = document.getElementById("streamid-name2").value;
@@ -302,7 +459,7 @@ async function Confirme_action2() {
                         data_creates_result.push(dataNew);
                     }                    
                 }
-                await new Promise(resolve => setTimeout(resolve, 500));                  
+                await new Promise(resolve => setTimeout(resolve, 200));                  
             }
             Swal.close();
 

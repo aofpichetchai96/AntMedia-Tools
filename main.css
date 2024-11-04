@@ -65,3 +65,12 @@ form {
     margin: 0 auto;
     width: 20%;
 }
+
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+    transform: translateY(-50px);
+}
+
+.modal.show .modal-dialog {
+    transform: translateY(0);
+}

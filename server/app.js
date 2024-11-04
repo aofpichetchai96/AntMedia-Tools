@@ -140,6 +140,64 @@ app.post('/login', async (req, res) => {
 //     }
 // });
 
+app.post('/create1', async (req, res) => {
+    try{
+        const { host, port, hostrtsp, name, streamid,app } = req.body; 
+        if(!host || !port || !hostrtsp || !name || !streamid || !app){
+            const data = {  
+                code: 998,
+                message:'Data required incorrect.'
+            };
+            return res.status(200).json(data);
+        }
+        const api_create = `${host}:${port}/rest/v2/request?_path=${app}/rest/v2/broadcasts/create&autoStart=true`;
+      
+        const data_create ={
+                            "hlsViewerCount":0,
+                            "dashViewerCount":0,
+                            "webRTCViewerCount":0,
+                            "rtmpViewerCount":0,
+                            "mp4Enabled":0,
+                            "playlistLoopEnabled":true,
+                            "playListItemList":[],
+                            "name": `${name}`,
+                            "streamUrl":`${hostrtsp}${streamid}`,
+                            "type":"streamSource"
+                        }
+        let response = await axios.post(
+            api_create,
+            data_create,
+            {                
+                headers: {
+                            'Content-Type': 'application/json',
+                            'Cookie': `${Cookie}`
+                        },
+                withCredentials: true
+            }
+        );
+
+        response = response.data;
+        if(response.success === true){    
+            const data = {  
+                            code: 1001,
+                            message:'Successfully',
+                            data: JSON.stringify(response)
+                        };
+            return res.status(200).json(data);
+        } 
+        else{
+            const data = {  
+                code: 999,
+                message:'add failed',
+            };
+            return res.status(200).json(data);
+        }
+
+    }catch(err){
+        return res.status(200).json(err.message);
+    }
+}); 
+
 app.post('/create2', async (req, res) => {
     try{
         const { name, rtsp_host, app, host, port } = req.body;

@@ -57,14 +57,14 @@
         <form class="row g-3" action="" style="padding-bottom: 20px;">
             <u><b><h4>Add Stream Source RTSP</h4></b></u>
      
-            <div class="col-sm-6 streams-app">
+            <div class="col-sm-4 streams-app">
                 <label style="float: left;">Select App</label>
                 <select id="appSelect" name="app" class="form-select" style="cursor: pointer;">
                     <option value="">Choose an app...</option>
                 </select>
             </div>
             <div class="col-sm-6 streams-app" style="padding-top: 0px;">
-                <label for="host" class="form-label" style="float: none;"><b>Select Action</b></label>  
+                <label for="host" class="form-label" style="float: none;display: block;"><b>Select Action</b></label>  
                 <button id="actionButton" style="width: auto;" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
                     Select Action
                 </button>
@@ -74,6 +74,16 @@
                     <li><a class="dropdown-item" href="#" id="action2" onclick="changeButtonText('rpst Link And Name'); showDiv('none', 'action2-from');">rpst Link And Name</a></li>
                 </ul>
             </div>
+
+            <div class="col-sm-2 streams-app"  id="show-data"  style="padding-top: 0px; display: none;">
+                <button style="float: inline-end; margin-top: 20px;" 
+                        type="button" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#myModal" 
+                        class="button-host-form btn btn-outline-secondary">
+                    Show Data
+                </button>    
+            </div>          
             
             <div class="col-sm-10" id="action1-from" style="margin: 0 auto; padding-top:35px; display:none">
                 <label for="host" class="form-label" ><b>Host rtps</b></label>    
@@ -108,6 +118,22 @@
              
         </form> 
         <!-- End Add Stream Source RTSP -->        
+    </div>
+
+    <!-- The Modal with Fade Animation -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog" style="max-width: max-content;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Latest added information.</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="data-table" style="font-weight: 400; width: max-content;font-size: 12px;">  </div>               
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 
 <script src="./js/bootstrap.bundle.min.js"></script>
